@@ -14,7 +14,7 @@ new_string = separator.join(iterable)
 例如，下面的代码将会连接一个列表中的所有字符串，使用逗号和空格作为分隔符：
 
 ```python
-codemy_list = ["apple", "banana", "orange"]
+my_list = ["apple", "banana", "orange"]
 new_string = ", ".join(my_list)
 print(new_string)   # 输出 "apple, banana, orange"
 ```
