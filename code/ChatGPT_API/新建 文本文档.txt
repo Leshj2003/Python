@@ -1,0 +1,16 @@
+pyinstaller -F 打包exe
+
+
+这段代码实现了一个基于OpenAI GPT-3.5模型的聊天机器人的GUI界面。主要包含以下几个部分：
+
+定义了一个MyChatBot类，用于处理和OpenAI API的交互，其中包含以下几个方法：
+receive_message_from_api: 从OpenAI API获取机器人的响应
+get_response: 对外暴露的方法，用于获取机器人的回答
+reset_log: 重置对话日志，清空之前的对话记录
+add_user_content: 将用户输入添加到对话日志中
+add_bot_content: 将机器人的回答添加到对话日志中
+定义了一个ChatUI类，用于实现GUI界面。其中包含以下几个方法：
+clear_conversation: 清空对话框
+chatting: 获取用户输入，并获取机器人的回答，展示在对话框中
+在ChatUI类的构造函数中，会创建一个MyChatBot实例，并创建一个GUI界面，包括一个对话框、一个输入框、一个发送按钮和一个清除对话按钮。
+其中，输入框和发送按钮绑定了回车键和点击事件，用户可以通过这两种方式发送消息给机器人。在发送消息后，机器人的回答会实时展示在对话框中。

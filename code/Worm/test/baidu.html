@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百度一下，你就知道</title>
+    <link href="base.c ss" rel="stylesheet">
+    <link href="baidu.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div id="shortcut">
+            <div class="left">
+                <span><a href="http://news.baidu.com/"  target="_blank">新闻</a></span>
+                <span><a href="https://www.hao123.com/?src=from_pc_logon" target="_blank">hao123</a></span>
+                <span><a href="http://map.baidu.com/" target="_blank">地图</a></span>
+                <span><a href="http://tieba.baidu.com/" target="_blank">贴吧</a></span>
+                <span><a href="https://haokan.baidu.com/?sfrom=baidu-top" target="_blank">视频</a></span>
+                <span><a href="http://image.baidu.com/" target="_blank">图片</a></span>
+                <span><a href="https://pan.baidu.com/?from=1026962h" target="_blank">网盘</a></span>
+                <div class="more" id="show_hide">
+                    <a href="http://www.baidu.com/more/" target="_blank">更多</a>
+                    <div class="hide">
+                        <div id="hide_topics">
+                            <div class="item"><a href="https://fanyi.baidu.com/" target="_blank"><img src='img/Baidu_fanyi.png' width='40px' height='40px'/></a><div>翻译</div></div>
+                            <div class="item"><a href="https://xueshu.baidu.com/" target="_blank"><img src='img/Baidu_xueshu.png' width='40px' height='40px'/></a><div>学术</div></div>
+                            <div class="item"><a href="https://wenku.baidu.com/" target="_blank"><img src='img/Baidu_wenku.png' width='40px' height='40px'/></a><div>文库</div></div>
+                            <div class="item"><a href="https://baike.baidu.com/" target="_blank"><img src='img/Baidu_baike.png' width='40px' height='40px'/></a><div>百科</div></div>
+                            <div class="item"><a href="https://zhidao.baidu.com/" target="_blank"><img src='img/Baidu_zhidao.png' width='40px' height='40px'/></a><div>知道</div></div>
+                            <div class="item"><a href="https://jiankang.baidu.com/widescreen/home" target="_blank"><img src='img/Baidu_jiankang.png' width='40px' height='40px'/></a><div>健康</div></div>
+                            <div class="item"><a href="http://e.baidu.com/ebaidu/home/?refer=887" target="_blank"><img src='img/Baidu_yingxiao.png' width='40px' height='40px'/></a><div>营销推广</div></div>
+                            <div class="item"><a href="https://live.baidu.com/?source=search_home" target="_blank"><img src='img/Baidu_zhibo.png' width='40px' height='40px'/></a><div>直播</div></div>
+                            <div class="item"><a href="https://music.91q.com/" target="_blank"><img src='img/Baidu_yinyue.png' width='40px' height='40px'/></a><div>音乐</div></div>
+                        </div>
+                        <div id="hide_foot"><a href="https://www.baidu.com/more/" target="_blank">查看全部百度产品></a></div>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <div class="right_div" id="weather">
+                    <div id="weather_show">
+                        <a href="#">北京&nbsp<img src="img/Baidu_weather_sunny.png" width="20px" height="20px">&nbsp31℃</a>
+                        <span id="weather_type">&nbsp&nbsp优&nbsp&nbsp</span>
+                    </div>
+                    <div id="weather_hide">
+                        <div id="weatherhide_top">
+                            <div id="weatherhide_topleft">
+                                <span>07月29日</span>
+                                <span>农历七月初一</span>
+                                <a href="#">未来7天天气</a>
+                            </div>
+                            <div id="weatherhide_topright">
+                                <a>切换</a>
+                            </div>
+                        </div>
+                        <div id="weatherhide_week">
+                            <div class="item" id="weather_dayone"><a href="#">今天(周五)<br><img src="img/Baidu_weather_sunny.png" width="30px" height="30px"><br>31℃<br>晴转多云<br>南风小于3级</a>></div>
+                            <div class="item" id="weather_daytwo"><a href="#">明天(周六)<br><img src="img/Baidu_weather_cloudy.png" width="30px" height="30px"><br>24~32<br>多云<br>东南风小于3级</a>></div>
+                            <div class="item" id="weather_daythree"><a href="#">后天(周日)<br><img src="img/Baidu_weather_cloudy.png" width="30px" height="30px"><br>25~32<br>多云<br>南风小于3级</a></div>
+                            <div class="item" id="weather_dayfour"><a href="#">周一<br><img src="img/Baidu_weather_cloudy.png" width="30px" height="30px"><br>25~33<br>多云<br>东南风小于3级</a></div>
+                            <div class="item" id="weather_dayfive"><a href="#">周二<br><img src="img/Baidu_weather_cloudy.png" width="30px" height="30px"><br>25~33<br>多云<br>南风小于3级</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right_div" id="configure">
+                    <div><a href="#">设置</a></div>
+                    <div id="configure_hide">
+                        <p>搜索设置</p>
+                        <p>高级搜索</p>
+                        <p>关闭预测</p>
+                        <p>隐私设置</p>
+                        <p>开启播报</p>
+                        <p>隐藏咨询</p>
+                        <p>关闭播报</p>
+                        <p>更换皮肤</p>
+                    </div>
+                </div>
+                <div class="right_div" id="account">
+                    <div><span><a href="#">qupeiran990707</a></span></div>
+                    <div id="account_hide">
+                        <p>个人中心</p>
+                        <p>账号设置</p>
+                        <p>切换账号</p>
+                        <p>退出登录</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <article>
+        <div id="search_logo">
+            <a href="https://www.baidu.com/s?wd=%E7%99%BE%E5%BA%A6%E7%83%AD%E6%90%9C&sa=ire_dl_gh_logo_texing&rsv_dl=igh_logo_pc" target="_blank">
+                <img src="img/Baidu_logo.png" width="270px" height="129px" title="点击一下，了解更多">
+            </a>
+        </div>
+        <form id="search_form">
+            <span id="search_input">
+                <input type="text" maxlength="100">
+            </span>
+            <span id="search_submit">
+                <input type="submit" value="百度一下">
+            </span>
+            <span id="search_img"><a href="#"><img src="img/Baidu_soutu.png" width="30px" height="30px"></a></span>
+            <span id="search_hide">按图片搜索</span>
+        </form>
+    </article>
+</body>
+</html>
