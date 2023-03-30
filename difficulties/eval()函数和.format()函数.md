@@ -29,7 +29,7 @@ print(result)  # 输出 5
 
 
 ```python
-pythonCopy codename = "Alice"
+name = "Alice"
 age = 25
 print("My name is {} and I am {} years old.".format(name, age))
 ```
@@ -51,7 +51,7 @@ My name is Alice and I am 25 years old.
 
 
 ```python
-pythonCopy codepi = 3.141592653589793
+pi = 3.141592653589793
 print("The value of pi is approximately {:.2f}.".format(pi))
 ```
 
@@ -77,7 +77,7 @@ The value of pi is approximately 3.14.
 
 
 ```python
-pythonCopy codename = "Alice"
+name = "Alice"
 age = 25
 print("My name is {0} and I am {1} years old. {0} is a nice name.".format(name, age))
 ```
