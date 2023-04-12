@@ -369,6 +369,65 @@ print(A.__subclasses__())	#子类的列表
 
 
 
+```python
+a = 20
+b = 100
+c = a + b
+d = a.__add__(b)
+
+print(c)
+print(d)
+
+class Student:
+    def __init__(self,name):
+        self.name = =name
+    def __add__()(self,other):
+        return self.name+other.name
+    def __len__()(self):
+        return len(self.name)
+    
+    
+stu1 = Student('张三')
+stu2 = Student('李四')
+
+s = stu1+stu2	#实现了两个对象的加法运算
+print(s)
+s = stu1.__add__(stu2)
+print(s)
+
+
+lst = [11,22,33,44]
+print(len(lst))
+print(lst.__len__())
+print(len(stu1))
+```
+
+```python
+class Person(object):
+        
+    def __new__()(cls,*args,**kwargs):
+        print('__new__被调用执行了，cls的id值为{0}'.format(id(cls)))
+        obj = super().__new__(cls)
+        print('创建的对象的id为{0}'.format(id(obj)))
+        return obj
+    
+    def __init__(self,name,age):
+        print('__init__被调用了，self的id值为{0}'.format(id(sellf)))
+        self.name = name
+        self.age = age
+        
+        
+print('object这个类对象的id为{0}'.format(id(object)))
+print('Person这个类对象的id为{0}'.format(id(Person)))
+
+#创建Person类的实例对象
+p1 = Person('张三',20)
+print('p1这个Person类的实例对象的id{0}'.format(id(p1)))
+'''
+obj是self的值
+'''
+```
+
 
 
 ---
@@ -516,4 +575,6 @@ print(point.x, point.y)
 需要注意的是，`__init__()`方法只是用于对象的初始化操作，它不会返回任何值。如果需要获取对象的返回值，可以考虑使用`__new__()`方法。
 
 此外，如果没有显式定义`__init__()`方法，Python解释器会自动调用一个默认的`__init__()`方法，该方法不接受任何参数，也不做任何事情。而如果定义了`__init__()`方法，那么当对象创建时就会自动调用该方法进行初始化操作。
+
+
 
