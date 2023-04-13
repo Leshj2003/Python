@@ -107,7 +107,7 @@ False 0
 
 ## 数据类型转换
 
-<img src="./images/uTools_1679646338693.png" />
+<img src="../images/uTools_1679646338693.png" />
 
 
 
