@@ -19,3 +19,17 @@ print(sorted_numbers)  # [1, 2, 3, 4]
 ```
 
 在这个例子中，我们先定义了一个包含四个整数的列表`numbers`，然后使用`sorted()`函数对其进行排序得到了一个新的列表`sorted_numbers`。最后，我们使用`print()`函数输出`sorted_numbers`，确认排序结果正确。
+
+
+
+
+
+`sorted()`函数可以对列表进行排序，但不会去重。如果需要去重，可以先使用`set()`函数将列表转换为集合，再使用`sorted()`函数进行排序。例如：
+
+```python
+lst = [3, 2, 1, 2, 3, 4]
+unique_lst = sorted(set(lst))
+print(unique_lst)  # [1, 2, 3, 4]
+```
+
+这样可以得到去重后的有序列表。
