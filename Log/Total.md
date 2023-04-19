@@ -1061,7 +1061,7 @@ lst[1:3] = []
 print(lst)
 ```
 
-## 
+
 
 ---
 
@@ -1735,7 +1735,7 @@ print('-8910'.zfill(8))
 |              |            | 通过参数`maxsplit`指定劈分字符串时的最大劈分次数，在经过最大劈分之后，剩余的子串会单独做为一部分 |
 
 ```python
-s = 'heelo world Python'
+s = 'hello world Python'
 lst = s.split()
 print(lst)
 #输出['hello','world','Python']
