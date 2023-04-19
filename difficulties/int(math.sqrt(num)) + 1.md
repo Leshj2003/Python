@@ -1,4 +1,4 @@
-##` int(math.sqrt(num)) + 1`
+## ` int(math.sqrt(num)) + 1`
 
 `int(math.sqrt(num)) + 1` 这段代码是一个常用的算法技巧，主要用于优化查找范围，可以让程序更快地找到答案。
 
