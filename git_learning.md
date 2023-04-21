@@ -76,3 +76,42 @@ rebase有两种主要的使用场景：
 5. 重复步骤3和4，直到所有提交都被应用完毕。
 
 注意：在进行rebase操作之前，最好先备份一下当前分支的提交历史，以便在出现问题时可以恢复到之前的状态。
+
+
+
+---
+
+## 同时关联gitee和github
+
+您可以使用以下步骤同时关联 Gitee 和 GitHub：
+
+1. 在本地计算机上设置 Git，如果您还没有设置，请在 Gitee 和 GitHub 上分别注册并创建仓库。
+
+2. 将 Gitee 仓库克隆到本地计算机，使用 Gitee 的 HTTPS 或 SSH 链接进行克隆。例如，
+
+   ```
+   $ git clone https://gitee.com/yourname/repository.git
+   ```
+
+3. 将 GitHub 仓库添加为远程源。打开终端，并使用以下命令添加远程源
+
+   ```
+   $ git remote add github https://github.com/yourname/repository.git
+   ```
+
+   注意：确保您已经创建了与 Gitee 仓库相同名称的 GitHub 仓库。
+
+4. 现在，您可以将代码推送到 Gitee 和 GitHub。
+
+   ```
+   $ git push origin master // 推送代码至Gitee
+   $ git push github master // 推送代码至GitHub
+   ```
+
+5. 如果您想将某个已提交的版本标记为新的发布版本，在将其推送至 Gitee 和 GitHub 之前，必须在本地和远程仓库中为其添加一个标记。以下是示例代码。
+
+   ```
+   $ git tag v1.0.0 // 为发布版本添加标签
+   $ git push origin v1.0.0 // 将标签推送到Gitee
+   $ git push github v1.0.0 // 将标签推送到GitHub
+   ```
