@@ -89,13 +89,13 @@ rebase有两种主要的使用场景：
 
 2. 将 Gitee 仓库克隆到本地计算机，使用 Gitee 的 HTTPS 或 SSH 链接进行克隆。例如，
 
-   ```
+   ```bash
    $ git clone https://gitee.com/yourname/repository.git
    ```
 
 3. 将 GitHub 仓库添加为远程源。打开终端，并使用以下命令添加远程源
 
-   ```
+   ```bash
    $ git remote add github https://github.com/yourname/repository.git
    ```
 
@@ -103,15 +103,104 @@ rebase有两种主要的使用场景：
 
 4. 现在，您可以将代码推送到 Gitee 和 GitHub。
 
-   ```
+   ```bash
    $ git push origin master // 推送代码至Gitee
    $ git push github master // 推送代码至GitHub
    ```
 
 5. 如果您想将某个已提交的版本标记为新的发布版本，在将其推送至 Gitee 和 GitHub 之前，必须在本地和远程仓库中为其添加一个标记。以下是示例代码。
 
-   ```
+   ```bash
    $ git tag v1.0.0 // 为发布版本添加标签
    $ git push origin v1.0.0 // 将标签推送到Gitee
    $ git push github v1.0.0 // 将标签推送到GitHub
    ```
+
+
+
+---
+
+
+
+## git中的^和~
+
+在 Git 中，^ 和 ~ 符号可以用来引用某个 commit 的父提交。
+
+- 符号 ^ 可以用在 commit SHA 的后面，来引用其父提交。例如，HEAD^ 就是当前提交的父提交，HEAD^^ 就是当前提交的爷爷提交，HEAD^3 就是当前提交的第三个父提交（只有 merge commit 才会有多个父提交）。
+- 符号 ~ 也可以用在 commit SHA 的后面，表示沿着父提交链向上数的位置。例如，HEAD~3 表示当前提交的第三个父提交，等价于 HEAD^^^。
+
+可以使用这些符号来引用特定的提交，进行 Git 操作，比如 git checkout、git diff 等等。
+
+---
+
+## HEAD
+
+在git中，HEAD是一个指针，它指向当前所在分支的最后一次提交。也可以说，HEAD是当前工作目录所处的提交版本。
+
+当我们在git中进行提交时，HEAD指针会随之移动到最新的提交版本。如果我们在某个分支上进行切换，HEAD指针也会移动到该分支的最新提交版本。
+
+除了指向当前所在分支的最新提交版本，HEAD还可以指向其他提交版本，例如，我们可以使用git checkout命令将HEAD指向某个特定的提交版本。
+
+需要注意的是，HEAD指针只能在本地仓库中使用，它不会被推送到远程仓库中。因此，当我们在不同的本地仓库中进行操作时，HEAD指针可能会指向不同的提交版本。
+
+---
+
+## git的撤销变更
+
+在Git中，撤销变更的方式有以下几种：
+
+1. git reset(本地仓库)
+使用git reset命令可以撤销某个commit，并将指针移回到上一个commit。这个操作会清除提交历史，并且会丢失所有被撤销的提交所做的修改。具体操作如下：
+
+```bash
+# 撤销最后一次提交
+git reset HEAD~1
+
+# 撤销最后两次提交
+git reset HEAD~2
+
+# 撤销到特定的提交
+git reset COMMIT_ID
+```
+
+2. git revert(远程仓库)
+使用git revert命令可以撤销某个commit，并创建一个新的commit来记录这个撤销操作。这个操作会保留提交历史，并且不会丢失任何提交所做的修改。具体操作如下：
+
+```bash
+# 撤销最后一次提交
+git revert HEAD
+
+# 撤销指定的提交
+git revert COMMIT_ID
+```
+
+3. git checkout
+使用git checkout命令可以撤销工作区中的修改，恢复到上一次提交的状态。这个操作不会修改提交历史，也不会删除任何提交。具体操作如下：
+
+```bash
+# 恢复某个文件到上一次提交的状态
+git checkout FILENAME
+```
+
+需要注意的是，这个操作会覆盖当前工作区中的修改，因此在执行之前需要先保存修改。如果要恢复所有文件到上一次提交的状态，可以使用以下命令：
+
+```bash
+# 恢复所有文件到上一次提交的状态
+git checkout .
+```
+
+4. git stash
+使用git stash命令可以将当前工作区中的修改存储到一个临时区域中，以便稍后恢复。这个操作不会修改提交历史，也不会删除任何提交。具体操作如下：
+
+```bash
+# 存储当前工作区中的修改
+git stash
+
+# 恢复最近一次存储的修改
+git stash apply
+
+# 恢复最近一次存储的修改，并从存储列表中删除
+git stash pop
+```
+
+需要注意的是，如果在存储修改之后又进行了新的修改，那么恢复修改时可能会出现冲突，需要手动解决。因此在执行之前需要先保存修改。

@@ -54,3 +54,98 @@ obj.common_method()  # This is a common method in the base class.
 接着我们定义了一个 `MyClass` 类，该类继承了`MyABC`。注意，在 `MyClass` 中必须重写 `MyABC` 所有的抽象方法，否则会在运行时引发异常。同时，`MyClass` 实现了一个普通方法 common_method，这个方法不是抽象方法，因此可以被直接子类继承并使用。
 
 最后我们创建了 `MyClass` 的实例对象 obj，并使用其中的方法。在运行过程中，如果忘记实现任何一个抽象方法，Python 解释器就会抛出 `TypeError` 异常。
+
+---
+
+##  `__str__`特殊方法
+
+`__str__`是一个Python中的特殊方法，用于返回对象的字符串表示形式。当使用print函数打印一个对象时，实际上是调用该对象的`__str__`方法来获取其字符串表示形式。
+
+`__str__`方法应该返回一个字符串，描述对象的内容和状态。这个字符串可以是任何格式的，可以包含对象的属性、方法、状态等信息。
+
+例如，我们定义一个Person类：
+
+```python
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def __str__(self):
+        return f"{self.name} is {self.age} years old."
+```
+
+当我们打印一个Person对象时，会调用该对象的`__str__`方法来获取其字符串表示形式：
+
+```python
+person = Person("Alice", 25)
+print(person)  # 输出：Alice is 25 years old.
+```
+
+`__str__`方法在调试时也很有用，因为它可以帮助我们快速了解对象的属性和状态。
+
+---
+
+## GUI应用开发步骤
+
+1. 导入`tkinter`模块中我们需要的东西。
+2. 创建一个顶层窗口对象并用它来承载整个GUI应用。
+3. 在顶层窗口对象上添加GUI组件。
+4. 通过代码将这些GUI组件的功能组织起来。
+5. 进入主事件循环(main loop)。
+
+
+
+```Python
+import tkinter
+import tkinter.messagebox
+
+
+def main():
+    flag = True
+
+    # 修改标签上的文字
+    def change_label_text():
+        nonlocal flag
+        flag = not flag
+        color, msg = ('red', 'Hello, world!')\
+            if flag else ('blue', 'Goodbye, world!')
+        label.config(text=msg, fg=color)
+
+    # 确认退出
+    def confirm_to_quit():
+        if tkinter.messagebox.askokcancel('温馨提示', '确定要退出吗?'):	#用户点击返回True/False
+            top.quit()
+
+    # 创建顶层窗口
+    top = tkinter.Tk()
+    # 设置窗口大小
+    top.geometry('240x160')
+    # 设置窗口标题
+    top.title('小游戏')
+    # 创建标签对象并添加到顶层窗口
+    label = tkinter.Label(top, text='Hello, world!', font='Arial -32', fg='red')
+    label.pack(expand=1)
+    # 创建一个装按钮的容器
+    panel = tkinter.Frame(top)
+    # 创建按钮对象 指定添加到哪个容器中 通过command参数绑定事件回调函数
+    button1 = tkinter.Button(panel, text='修改', command=change_label_text)
+    button1.pack(side='left')
+    button2 = tkinter.Button(panel, text='退出', command=confirm_to_quit)
+    button2.pack(side='right')
+    panel.pack(side='bottom')
+    # 开启主事件循环
+    tkinter.mainloop()
+
+
+if __name__ == '__main__':
+    main()
+```
+
+### Tk为控件的摆放提供了三种布局管理器
+
+1. Pack布局管理器：将控件按照添加顺序自动排列，可以设置控件的填充方式和位置。
+
+2. Grid布局管理器：将控件放置在网格中，可以设置控件所占的行数和列数，以及控件的对齐方式和间距。
+
+3. Place布局管理器：通过指定控件的绝对位置和大小来进行布局，适用于需要精确控制控件位置和大小的场合。
