@@ -32,6 +32,8 @@
 def read_file(filename):
     with open(filename, 'r', encoding='utf-8') as file:          # 只读模式打开文件
         file_to_list = [line.strip().split(',') for line in file]          # 文件全部内容读取出来放入列表中，每个元素为一行字符串
+
+    #
     return file_to_list                                                    # 以列表形式返回文件中的数据
 
 
@@ -67,6 +69,9 @@ if __name__ == '__main__':
     student_list = read_file('studentList.csv')[1:]                        # 获得学生信息列表
     school_code = read_file('schoolCode.csv')                          # 获得学院信息列表
     major_code = read_file('MajorCode.csv')                            # 获得专业信息列表
+    # print(student_list)
+    # print(school_code)
+    # print(major_code)
     studentDetail = student_id(student_list, school_code, major_code)  # 调用函数计算ID并插入到列表中
     print(*student_info(stuName, studentDetail))                       # 输出学生信息
     ls_classmate = classmate(stuClass, studentDetail)                  # 返回同班同学信息列表

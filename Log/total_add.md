@@ -357,5 +357,7 @@ while True:
     pygame.display.update()
 ```
 
-### 大球吃小吃
+### 大球吃小球
+
+
 

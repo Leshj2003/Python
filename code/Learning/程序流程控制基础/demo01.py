@@ -1,4 +1,4 @@
-# -*-  codeing = utf-8 -*-
+# -*-  coding = utf-8 -*-
 # @Time : 2023/3/29 21:31
 # @Author : LHJ青梦
 # @File : demo01.py
