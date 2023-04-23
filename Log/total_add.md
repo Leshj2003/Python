@@ -94,6 +94,14 @@ print(person)  # 输出：Alice is 25 years old.
 4. 通过代码将这些GUI组件的功能组织起来。
 5. 进入主事件循环(main loop)。
 
+```python
+import  tkinter
+windows = tkinter.Tk()
+windows.title('First windows')
+windows.geometry('200x200')
+windows.mainloop()
+```
+
 
 
 ```Python
@@ -149,3 +157,205 @@ if __name__ == '__main__':
 2. Grid布局管理器：将控件放置在网格中，可以设置控件所占的行数和列数，以及控件的对齐方式和间距。
 
 3. Place布局管理器：通过指定控件的绝对位置和大小来进行布局，适用于需要精确控制控件位置和大小的场合。
+
+---
+
+## `pygame`
+
+`pygame` 是一个基于 Python 的游戏开发库，它提供了许多在开发 2D 游戏时所需的功能，并且易于使用。`pygame` 包含许多模块，例如绘制、输入处理、碰撞检测以及声音等等。
+
+
+
+### 开发步骤
+
+下面是一个游戏开发时使用 `pygame` 的基本步骤：
+
+1. 导入 `pygame` 库
+
+```python
+import pygame
+```
+
+​	2.初始化 `Pygame`
+
+```python
+pygame.init()
+```
+
+​	3.创建窗口
+
+```python
+WINDOW_SIZE = (800, 600)
+screen = pygame.display.set_mode(WINDOW_SIZE)
+```
+
+​	4.设置窗口标题
+
+```python
+pygame.display.set_caption('My Game')
+```
+
+​	5.加载资源，如图片、声音或字体文件等
+
+```python
+image = pygame.image.load('example.png')
+sound = pygame.mixer.Sound('example.wav')
+font = pygame.font.Font(None, 40)
+```
+
+6. 在屏幕上绘制图形和文本以及处理输入事件
+
+```python
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # 绘制背景色
+    screen.fill((255, 255, 255))
+
+    # 绘制图形
+    screen.blit(image, (0, 0))
+
+    # 绘制文本
+    text = font.render('Hello, World!', True, (0, 0, 255))
+    screen.blit(text, (200, 200))
+
+    # 更新界面
+    pygame.display.flip()
+```
+
+7. 运行游戏主循环
+
+```python
+if __name__ == '__main__':
+    main()
+```
+
+需要注意的是，具体实现方式可能因游戏类型和个人开发风格而有所不同，这里只提供了一种基本的框架。通过不断练习和阅读 `pygame` 相关文档和示例代码，可以逐渐掌握 `Pygame` 的使用方法。
+
+### 简单例子
+
+下面是 `pygame` 给出的几个简单例子：
+
+1. 显示一个基本窗口
+
+```python
+import pygame, sys
+from pygame.locals import *
+
+pygame.init()
+
+# 设置窗口大小
+WINDOW_SIZE = (400, 300)
+
+# 创建主窗口
+win = pygame.display.set_mode(WINDOW_SIZE)
+
+# 设置窗口标题
+pygame.display.set_caption('pygame demo')
+
+# 事件循环
+while True:
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # 填充背景色
+    win.fill((255, 255, 255))
+
+    # 更新屏幕显示
+    pygame.display.update()
+```
+
+1. 移动图形
+
+```python
+import pygame, sys
+from pygame.locals import *
+
+pygame.init()
+
+# 设置窗口大小
+WINDOW_SIZE = (400, 300)
+
+# 创建主窗口
+win = pygame.display.set_mode(WINDOW_SIZE)
+
+# 设置窗口标题
+pygame.display.set_caption('pygame demo')
+
+# 绘制图形
+rect = pygame.Rect(50, 50, 100, 100)
+color = (0, 255, 0)
+
+# 事件循环
+while True:
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # 填充背景色
+    win.fill((255, 255, 255))
+
+    # 绘制图形
+    pygame.draw.rect(win, color, rect)
+
+    # 检查用户按键
+    keys = pygame.key.get_pressed()
+    if keys[K_LEFT]:
+        rect.move_ip(-5, 0)
+    elif keys[K_RIGHT]:
+        rect.move_ip(5, 0)
+    elif keys[K_UP]:
+        rect.move_ip(0, -5)
+    elif keys[K_DOWN]:
+        rect.move_ip(0, 5)
+
+    # 更新屏幕显示
+    pygame.display.update()
+```
+
+1. 声音播放
+
+```python
+import pygame, sys
+from pygame.locals import *
+
+pygame.init()
+
+# 设置窗口大小
+WINDOW_SIZE = (400, 300)
+
+# 创建主窗口
+win = pygame.display.set_mode(WINDOW_SIZE)
+
+# 设置窗口标题
+pygame.display.set_caption('pygame demo')
+
+# 加载音频文件
+sound = pygame.mixer.Sound('example.wav')
+
+# 事件循环
+while True:
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+
+        # 检查空格键
+        if event.type == KEYDOWN and event.key == K_SPACE:
+            sound.play()
+
+    # 填充背景色
+    win.fill((255, 255, 255))
+
+    # 更新屏幕显示
+    pygame.display.update()
+```
+
+### 大球吃小吃
+
