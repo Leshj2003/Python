@@ -504,12 +504,93 @@ class Ball(object):
         '''移动'''
         self.x += self.sx
         self.y += self.sy
-        
+        if self.x - self.radius <= 0 or self.x + self.radius >= screen.get_width():
+            self.sx = -self.sx
+        if self.y - self.radius <= 0 or self.y + self.radius >= screen.get_height():
+            self.sy = -self.sy
+            
+    def eat(self,other):
+        if self.alive and other.alive and self != orther:
+            dx,dy = self.x - other.x,self.y-other.y
+            distance = sqrt(dx ** 2 + dy ** 2)
+            if distance < self.radius + other.radius and self.radius > other.radius:
+                other.alive = False
+                self.radius = self.radius + int(other.radius * 0.146)
+                
+                
+    def draw(self,screen):
+        pygame.draw.circle(screen,self.color,(self.x,self.y),self.radius,0)
 ```
+
+* move方法
+
+这段代码是一个小球类中的移动方法，用于控制小球在屏幕上移动。
+
+首先，球的位置根据球的速度（`self.sx`和`self.sy`）进行更新，也就是小球向前移动。
+
+然后，通过判断小球的位置是否超出屏幕边界来控制小球的反弹。具体来说，如果小球的左边缘（`self.x - self.radius`）触碰到了屏幕左边缘（0），或者小球的右边缘（`self.x + self.radius`）触碰到了屏幕右边缘（`screen.get_width()`），则小球在水平方向上的速度要反向（`self.sx = -self.sx`）。
+
+同样地，如果小球的上边缘（self.y - self.radius）触碰到了屏幕上边缘（0），或者小球的下边缘（self.y + self.radius）触碰到了屏幕下边缘（screen.get_height()），则小球在竖直方向上的速度要反向（self.sy = -self.sy）。
+
+这样，小球就能在屏幕上自由运动，并且在碰到边缘时能够反弹。
+
+* eat方法
+
+这段代码实现了球类之间的碰撞检测和吃掉其他球的操作。
+
+首先判断两个球是否都存活且不是同一个球，然后计算两球中心点之间的距离，如果距离小于两球半径之和并且当前球的半径大于被吃掉的球的半径，就将被吃掉的球的状态设置为死亡状态，并将当前球的半径增加一个比例因子。
+
+这里用到了球体积和半径的关系：两个球体积之和等于它们的半径的立方和，即$V_1+V_2 = \frac{4}{3} \pi (r_1^3+r_2^3)$，将此式变形可得$\frac{r_1^3}{r_2^3}=\frac{V_1}{V_2}$。由于被吃掉的球的体积是当前球体积的$14.6\%$，所以$\frac{r_1^3}{r_2^3}=\frac{V_1}{0.146V_1}=6.8493$，因此有$r_1=1.5487r_2$，即当前球的半径增加了被吃掉的球半径的$54.87\%$。
 
 #### 事件处理
 
 ```python
+def main():
+    # 定义用来装所有球的容器
+    balls = []
+    # 初始化导入的pygame中的模块
+    pygame.init()
+    # 初始化用于显示的窗口并设置窗口尺寸
+    screen = pygame.display.set_mode((800, 600))
+    # 设置当前窗口的标题
+    pygame.display.set_caption('大球吃小球')
+    running = True
+    # 开启一个事件循环处理发生的事件
+    while running:
+        # 从消息队列中获取事件并对事件进行处理
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            # 处理鼠标事件的代码
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                # 获得点击鼠标的位置
+                x, y = event.pos
+                radius = randint(10, 100)
+                sx, sy = randint(-10, 10), randint(-10, 10)
+                color = Color.random_color()
+                # 在点击鼠标的位置创建一个球(大小、速度和颜色随机)
+                ball = Ball(x, y, radius, sx, sy, color)
+                # 将球添加到列表容器中
+                balls.append(ball)
+        screen.fill((255, 255, 255))
+        # 取出容器中的球 如果没被吃掉就绘制 被吃掉了就移除
+        for ball in balls:
+            if ball.alive:
+                ball.draw(screen)
+            else:
+                balls.remove(ball)
+        pygame.display.flip()
+        # 每隔50毫秒就改变球的位置再刷新窗口
+        pygame.time.delay(50)
+        for ball in balls:
+            ball.move(screen)
+            # 检查球有没有吃到其他的球
+            for other in balls:
+                ball.eat(other)
+
+
+if __name__ == '__main__':
+    main()
 ```
 
 
@@ -863,3 +944,255 @@ while True:
 在这个示例中，我们创建了一个 `Player` 类，继承自 `pygame.sprite.Sprite`。在 `__init__` 方法中，我们创建了一个白色的矩形作为玩家精灵的图像，并将其添加到了精灵的矩形中。在 `update` 方法中，我们每次更新玩家精灵的位置。在主循环中，我们将玩家精灵添加到精灵组中，并在每一帧中更新和绘制所有精灵。这个示例中玩家精灵每次更新时会向右移动。
 
 `pygame.sprite` 提供了很多有用的方法和属性，例如 `collide_rect`、`collide_mask` 等，可以用于检测精灵之间的碰撞等操作。在实际的游戏开发中，我们通常会继承自 `pygame.sprite.Sprite` 创建自己的精灵类，并根据游戏需求添加自定义的属性和方法。
+
+### `event.type`
+
+在 `Pygame`  中，事件(Event) 是指由用户或操作系统引起的可感知的操作，例如键盘按键按下或鼠标移动等。当 `Pygame`  接收到这些事件时，它们被封装成一些特定类型的事件(Event)。在处理 `Pygame` 事件时，我们通常使用 `pygame.event.get()` 来获取当前所有的事件(Event)，然后使用循环遍历每一个事件(Event)并对其进行处理。
+
+在 `Pygame`  中，每个事件(Event)都有一个 `type` 属性，该属性指示事件(Event)的类型。`type` 可以是预定义的常量，例如 `pygame.QUIT` 表示用户请求关闭 `Pygame`  程序的窗口，或者是用户自定义的事件(Event)类型。根据事件(Event)的类型，我们可以进行不同的操作来处理它们。
+
+以下是一些常见的`Pygame`  事件类型：
+
+- `pygame.QUIT`：用户请求关闭 `Pygame`  程序的窗口。
+- `pygame.KEYDOWN`：键盘按键按下事件。
+- `pygame.KEYUP`：键盘按键释放事件。
+- `pygame.MOUSEBUTTONDOWN`：鼠标按键按下事件。
+- `pygame.MOUSEBUTTONUP`：鼠标按键释放事件。
+- `pygame.MOUSEMOTION`：鼠标移动事件。
+
+除了上述常见的事件类型，`Pygame` 还支持用户自定义事件(Event)类型，使用方式与预定义事件(Event)类型相同。
+
+### `event.pos`
+
+在 `Pygame` 中，事件对象（`event`）代表着用户执行的某个操作，例如按下键盘、移动鼠标等。当`Pygame` 接收到一个事件后，会在事件对象中存储该事件的各种信息，其中 `event.pos` 表示该事件发生的位置。
+
+具体来说，`event.pos` 是一个包含两个整数的元组，表示事件发生的坐标（x，y）。通常情况下，该坐标指的是相对于 `Pygame` 窗口左上角的位置，单位是像素。因此，当我们想要响应鼠标点击等事件时，可以使用 `event.pos` 来获取鼠标点击的位置。
+
+例如，以下代码片段可以在 `Pygame` 窗口中显示鼠标点击的位置：
+
+```python
+import pygame
+
+pygame.init()
+
+size = width, height = 640, 480
+screen = pygame.display.set_mode(size)
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.MOUSEBUTTONUP:
+            print('Clicked at', event.pos)
+
+    pygame.display.flip()
+```
+
+在上述代码中，我们使用 `Pygame`中的 `MOUSEBUTTONUP` 事件来响应鼠标点击事件，并通过 `event.pos` 获取鼠标点击的位置。
+
+---
+
+## 读取JSON文件
+
+* 把一个列表或一个字典中的数据保存到文件中
+
+```json
+{
+    "name" : "青梦",
+    "age" : 20,
+    "qq" : 10086
+    "friends" : ["及言","雪莉"],
+	"cars" : [
+        {"brand": "BYD", "max_speed": 180},
+        {"brand": "Audi", "max_speed": 280},
+        {"brand": "Benz", "max_speed": 320},
+    ]
+}
+```
+
+* JSON和字典的区别
+
+| JSON                | Python       |
+| ------------------- | ------------ |
+| object              | dict         |
+| array               | list         |
+| string              | str          |
+| number (int / real) | int / float  |
+| true / false        | True / False |
+| null                | None         |
+
+| Python                                 | JSON         |
+| -------------------------------------- | ------------ |
+| dict                                   | object       |
+| list, tuple                            | array        |
+| str                                    | string       |
+| int, float, int- & float-derived Enums | number       |
+| True / False                           | true / false |
+| None                                   | null         |
+
+* 示例
+
+```python
+import json
+
+def main():
+    mydict = {
+    "name" : "青梦",
+    "age" : 20,
+    "qq" : 10086
+    "friends" : ["及言","雪莉"],
+	"cars" : [
+        {"brand": "BYD", "max_speed": 180},
+        {"brand": "Audi", "max_speed": 280},
+        {"brand": "Benz", "max_speed": 320},
+    	]
+	}
+    try:
+        with open('data.json','w',encoding='utf-8') as fs:
+            json.dump(mydict,fs)
+        except IOError as e:
+            print(e)
+        print('保存数据成功！')
+        
+        
+if __name__ == '__main__':
+    main()
+    
+```
+
+### json模块常用函数
+
+Python的`json`模块提供了许多用于处理JSON数据的函数。下面是一些常用函数及其例子：
+
+1. `json.loads()`：将JSON格式的字符串转换为Python对象。
+```python
+import json
+
+json_string = '{"name": "Alice", "age": 25, "is_student": true}'
+python_object = json.loads(json_string)
+print(python_object)
+# 输出：{'name': 'Alice', 'age': 25, 'is_student': True}
+```
+
+2. `json.dumps()`：将Python对象转换为JSON格式的字符串。
+```python
+import json
+
+python_object = {'name': 'Alice', 'age': 25, 'is_student': True}
+json_string = json.dumps(python_object)
+print(json_string)
+# 输出：'{"name": "Alice", "age": 25, "is_student": true}'
+```
+
+3. `json.load()`：从文件中读取JSON数据并将其转换为Python对象。
+```python
+import json
+
+with open('data.json', 'r') as f:
+    python_object = json.load(f)
+print(python_object)
+```
+
+4. `json.dump()`：将Python对象转换为JSON格式并将其写入文件。
+```python
+import json
+
+python_object = {'name': 'Alice', 'age': 25, 'is_student': True}
+with open('data.json', 'w') as f:
+    json.dump(python_object, f)
+```
+
+5. `json.JSONEncoder`和`json.JSONDecoder`：使用自定义的编码器和解码器来转换数据。
+```python
+import json
+
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+class PersonEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Person):
+            return {'name': obj.name, 'age': obj.age}
+        return json.JSONEncoder.default(self, obj)
+
+class PersonDecoder(json.JSONDecoder):
+    def decode(self, s):
+        obj = super().decode(s)
+        return Person(obj['name'], obj['age'])
+
+person = Person('Alice', 25)
+json_string = json.dumps(person, cls=PersonEncoder)
+print(json_string)
+# 输出：'{"name": "Alice", "age": 25}'
+
+person2 = json.loads(json_string, cls=PersonDecoder)
+print(person2.name, person2.age)
+# 输出：Alice 25
+```
+
+## Python实现序列化和反序列化
+
+在 Python 中实现序列化和反序列化的方法很多，最常用的是使用 `pickle` 和 `json` 库。
+
+`pickle` 库可以将 Python 对象序列化为字节流，也可以将字节流反序列化为 Python 对象。它支持大多数 Python 内置对象类型，包括列表、元组、字典、集合等等。以下是一个序列化和反序列化 Python 列表的例子：
+
+```python
+import pickle
+
+mylist = [1, 2, 3, 4]
+# 序列化
+with open('data.pkl', 'wb') as f:
+    pickle.dump(mylist, f)
+# 反序列化
+with open('data.pkl', 'rb') as f:
+    loaded_list = pickle.load(f)
+print(loaded_list)
+```
+
+`json` 库则可以将 Python 对象转换为 JSON 格式的字符串，也可以将 JSON 格式的字符串转换为 Python 对象。它支持的 Python 对象类型相对较少，但可以在 Python 和其他语言之间传递数据。以下是一个将 Python 字典转换为 JSON 格式字符串的例子：
+
+```python
+import json
+
+mydict = {"name": "John", "age": 30, "city": "New York"}
+# 序列化
+json_string = json.dumps(mydict)
+print(json_string)
+# 反序列化
+loaded_dict = json.loads(json_string)
+print(loaded_dict)
+```
+
+需要注意的是，`pickle` 序列化的结果只能在 Python 中使用，而 `json` 序列化的结果则可以在多种语言之间共享。在使用 `pickle` 序列化时要谨慎，避免安全风险。
+
+### shelve模块
+
+`shelve` 模块是 Python 内置的对象持久化模块，它实现了对象的序列化和反序列化，可将 Python 中的任意对象存储到磁盘上，然后再从磁盘上加载并还原成原始对象。使用 `shelve` 模块可以方便地将 Python 中的对象持久化，而无需手动实现序列化和反序列化的过程。
+
+`shelve` 模块的主要特点如下：
+
+- 可以将任意类型的 Python 对象序列化并保存到磁盘上。
+- 支持基本的 CRUD 操作：创建、读取、更新、删除。
+- 使用字典样式的 API。
+- 可以对同一个文件进行多次操作，即不必一次性将所有数据都读入内存，这对于大型数据集非常有用。
+
+`shelve` 模块使用起来非常简单，以下是一个示例：
+
+```python
+import shelve
+
+# 创建一个 shelve 文件并写入数据
+with shelve.open('mydata') as db:
+    db['spam'] = {'name': 'spam', 'age': 3, 'color': 'white'}
+    db['eggs'] = {'name': 'eggs', 'age': 2, 'color': 'brown'}
+
+# 从 shelve 文件中读取数据
+with shelve.open('mydata') as db:
+    print(db['spam'])  # {'name': 'spam', 'age': 3, 'color': 'white'}
+    print(db['eggs'])  # {'name': 'eggs', 'age': 2, 'color': 'brown'}
+```
+
+在上面的示例中，我们首先使用 `with` 语句打开一个 shelve 文件 `mydata`，然后向其中写入两个字典数据，接着再次打开文件并读取数据。在 shelve 中，数据是以键值对的形式存储的，因此我们可以通过键来读取相应的值。需要注意的是，在读取数据时，如果使用的是不存在的键，`shelve` 会抛出 `KeyError` 异常。
