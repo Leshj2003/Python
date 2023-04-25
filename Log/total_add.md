@@ -1196,3 +1196,144 @@ with shelve.open('mydata') as db:
 ```
 
 在上面的示例中，我们首先使用 `with` 语句打开一个 shelve 文件 `mydata`，然后向其中写入两个字典数据，接着再次打开文件并读取数据。在 shelve 中，数据是以键值对的形式存储的，因此我们可以通过键来读取相应的值。需要注意的是，在读取数据时，如果使用的是不存在的键，`shelve` 会抛出 `KeyError` 异常。
+
+---
+
+## 正则表达式-re模块
+
+Python中的re模块是用于正则表达式操作的模块。正则表达式是一种强大的字符串处理工具，可以用于字符串的匹配、搜索、替换等操作。re模块提供了很多方法来进行正则表达式的操作，包括模式匹配、查找、替换等功能。
+
+下面是一些常用的re模块方法：
+
+1. match()方法：尝试从字符串的起始位置匹配一个模式，如果匹配成功返回一个匹配对象，否则返回None。
+
+示例代码：
+
+```python
+import re
+
+pattern = 'hello'
+string = 'hello world'
+result = re.match(pattern, string)
+if result:
+    print(result.group())  # 输出匹配结果'hello'
+else:
+    print('匹配失败')
+```
+
+2. search()方法：在字符串中搜索匹配给定的正则表达式的第一个位置，并返回相应的匹配对象。如果没有匹配成功，则返回None。
+
+示例代码：
+
+```python
+import re
+
+pattern = 'world'
+string = 'hello world'
+result = re.search(pattern, string)
+if result:
+    print(result.group())  # 输出匹配结果'world'
+else:
+    print('匹配失败')
+```
+
+3. findall()方法：在字符串中查找所有匹配正则表达式的字符串，并以列表形式返回。
+
+示例代码：
+
+```python
+import re
+
+pattern = '\d+'
+string = '1a2b3c4d5e'
+result = re.findall(pattern, string)
+print(result)  # 输出匹配结果['1', '2', '3', '4', '5']
+```
+
+4. sub()方法：使用给定的替换字符串替换匹配正则表达式的字符串，并返回替换后的字符串。
+
+示例代码：
+
+```python
+import re
+
+pattern = 'world'
+string = 'hello world'
+result = re.sub(pattern, 'Python', string)
+print(result)  # 输出替换结果'hello Python'
+```
+
+5. split()方法：使用正则表达式指定的模式分隔字符串，并返回分隔后的子字符串列表。
+
+示例代码：
+
+```python
+import re
+
+pattern = '[,;.]'
+string = 'a,b;c.d'
+result = re.split(pattern, string)
+print(result)  # 输出分隔后的子字符串列表['a', 'b', 'c', 'd']
+```
+
+除了以上方法外，re模块还提供了很多其他的方法和属性，可以根据具体需求进行选择和使用。在使用re模块时，要注意正则表达式的语法和规则，避免出现不必要的错误。
+
+---
+
+## 正则表达式基本符号
+
+| 符号         | 解释                             | 示例             | 说明                                                         |
+| ------------ | -------------------------------- | ---------------- | ------------------------------------------------------------ |
+| .            | 匹配任意字符                     | b.t              | 可以匹配bat / but / b#t / b1t等                              |
+| \w           | 匹配字母/数字/下划线             | b\wt             | 可以匹配bat / b1t / b_t等 但不能匹配b#t                      |
+| \s           | 匹配空白字符（包括\r、\n、\t等） | love\syou        | 可以匹配love you                                             |
+| \d           | 匹配数字                         | \d\d             | 可以匹配01 / 23 / 99等                                       |
+| \b           | 匹配单词的边界                   | \bThe\b          |                                                              |
+| ^            | 匹配字符串的开始                 | ^The             | 可以匹配The开头的字符串                                      |
+| $            | 匹配字符串的结束                 | .exe$            | 可以匹配.exe结尾的字符串                                     |
+| \W           | 匹配非字母/数字/下划线           | b\Wt             | 可以匹配b#t / b@t等 但不能匹配but / b1t / b_t等              |
+| \S           | 匹配非空白字符                   | love\Syou        | 可以匹配love#you等 但不能匹配love you                        |
+| \D           | 匹配非数字                       | \d\D             | 可以匹配9a / 3# / 0F等                                       |
+| \B           | 匹配非单词边界                   | \Bio\B           |                                                              |
+| []           | 匹配来自字符集的任意单一字符     | [aeiou]          | 可以匹配任一元音字母字符                                     |
+| [^]          | 匹配不在字符集中的任意单一字符   | [^aeiou]         | 可以匹配任一非元音字母字符                                   |
+| *            | 匹配0次或多次                    | \w*              |                                                              |
+| +            | 匹配1次或多次                    | \w+              |                                                              |
+| ?            | 匹配0次或1次                     | \w?              |                                                              |
+| {N}          | 匹配N次                          | \w{3}            |                                                              |
+| {M,}         | 匹配至少M次                      | \w{3,}           |                                                              |
+| {M,N}        | 匹配至少M次至多N次               | \w{3,6}          |                                                              |
+| \|           | 分支                             | foo\|bar         | 可以匹配foo或者bar                                           |
+| (?#)         | 注释                             |                  |                                                              |
+| (exp)        | 匹配exp并捕获到自动命名的组中    |                  |                                                              |
+| (?<name>exp) | 匹配exp并捕获到名为name的组中    |                  |                                                              |
+| (?:exp)      | 匹配exp但是不捕获匹配的文本      |                  |                                                              |
+| (?=exp)      | 匹配exp前面的位置                | \b\w+(?=ing)     | 可以匹配I'm dancing中的danc                                  |
+| (?<=exp)     | 匹配exp后面的位置                | (?<=\bdanc)\w+\b | 可以匹配I love dancing and reading中的第一个ing              |
+| (?!exp)      | 匹配后面不是exp的位置            |                  |                                                              |
+| (?<!exp)     | 匹配前面不是exp的位置            |                  |                                                              |
+| *?           | 重复任意次，但尽可能少重复       | a.*b a.*?b       | 将正则表达式应用于aabab，前者会匹配整个字符串aabab，后者会匹配aab和ab两个字符串 |
+| +?           | 重复1次或多次，但尽可能少重复    |                  |                                                              |
+| ??           | 重复0次或1次，但尽可能少重复     |                  |                                                              |
+| {M,N}?       | 重复M到N次，但尽可能少重复       |                  |                                                              |
+| {M,}?        | 重复M次以上，但尽可能少重复      |                  |                                                              |
+
+* 如果需要匹配的字符是正则表达式中的特殊字符，那么可以使用\\进行转义处理，例如想匹配小数点可以写成\\.就可以了，因为直接写.会匹配任意字符；同理，想匹配圆括号必须写成\\(和\\)，否则圆括号被视为正则表达式中的分组。
+
+---
+
+## re模块核心函数
+
+| 函数                                         | 说明                                                         |
+| -------------------------------------------- | ------------------------------------------------------------ |
+| compile(pattern, flags=0)                    | 编译正则表达式返回正则表达式对象                             |
+| match(pattern, string, flags=0)              | 用正则表达式匹配字符串 成功返回匹配对象 否则返回None         |
+| search(pattern, string, flags=0)             | 搜索字符串中第一次出现正则表达式的模式 成功返回匹配对象 否则返回None |
+| split(pattern, string, maxsplit=0, flags=0)  | 用正则表达式指定的模式分隔符拆分字符串 返回列表              |
+| sub(pattern, repl, string, count=0, flags=0) | 用指定的字符串替换原字符串中与正则表达式匹配的模式 可以用count指定替换的次数 |
+| fullmatch(pattern, string, flags=0)          | match函数的完全匹配（从字符串开头到结尾）版本                |
+| findall(pattern, string, flags=0)            | 查找字符串所有与正则表达式匹配的模式 返回字符串的列表        |
+| finditer(pattern, string, flags=0)           | 查找字符串所有与正则表达式匹配的模式 返回一个迭代器          |
+| purge()                                      | 清除隐式编译的正则表达式的缓存                               |
+| re.I / re.IGNORECASE                         | 忽略大小写匹配标记                                           |
+| re.M / re.MULTILINE                          | 多行匹配标记                                                 |
