@@ -1337,3 +1337,200 @@ print(result)  # 输出分隔后的子字符串列表['a', 'b', 'c', 'd']
 | purge()                                      | 清除隐式编译的正则表达式的缓存                               |
 | re.I / re.IGNORECASE                         | 忽略大小写匹配标记                                           |
 | re.M / re.MULTILINE                          | 多行匹配标记                                                 |
+
+Python的re模块提供了一组用于处理正则表达式的函数。以下是常用的方法及其例子：
+
+1. re.compile(pattern, flags=0)
+
+将正则表达式的字符串形式编译为正则表达式对象。
+
+```python
+import re
+
+pattern = re.compile(r'\d+')
+result = pattern.findall('hello123world456')
+print(result)  # ['123', '456']
+```
+
+2. re.match(pattern, string, flags=0)
+
+尝试从字符串的起始位置匹配正则表达式，返回匹配对象，如果匹配失败返回None。
+
+```python
+import re
+
+match = re.match(r'[a-z]+\d+', 'hello123world')
+if match:
+    print(match.group())  # hello123
+else:
+    print('No match')
+```
+
+3. re.search(pattern, string, flags=0)
+
+在字符串中查找匹配正则表达式的第一个位置，返回匹配对象，如果匹配失败返回None。
+
+```python
+import re
+
+match = re.search(r'[a-z]+\d+', 'hello123world')
+if match:
+    print(match.group())  # hello123
+else:
+    print('No match')
+```
+
+4. re.findall(pattern, string, flags=0)
+
+返回所有匹配正则表达式的子串列表。
+
+```python
+import re
+
+result = re.findall(r'[a-z]+\d+', 'hello123world456')
+print(result)  # ['hello123', 'world456']
+```
+
+5. re.sub(pattern, repl, string, count=0, flags=0)
+
+用于替换字符串中所有匹配正则表达式的子串。
+
+```python
+import re
+
+result = re.sub(r'\d+', '888', 'hello123world456')
+print(result)  # hello888world888
+```
+
+6. re.split(pattern, string, maxsplit=0, flags=0)
+
+使用正则表达式分割字符串，返回分割后的列表。
+
+```python
+import re
+
+result = re.split(r'\s+', 'hello  world')
+print(result)  # ['hello', 'world']
+```
+
+### 例子1：验证输入用户名和QQ号是否有效并给出对应的提示信息
+
+```python
+import re
+
+def main():
+    username = input('请输入用户名')
+    qq = input('请输入QQ号')
+    
+    m1 = re.match(r'^[0-9a-zA-Z_]{6,20}$',username)
+    if not m1:
+        print('请输入有效的用户名')
+        
+    m2 = re.match(r'^[1-9]\d{4,11}$',qq)
+    if not m2:
+        print('请输入有效qq')
+        
+    if m1 and m2:
+        print('你输入信息有效')
+        
+        
+if __name__ == '__main__':
+    main()
+```
+
+### 例子2：从一段文字提取出国内手机号码
+
+```python
+import re
+
+def main():
+    pattern = re.compile(r'(?<=\D)1[34578]\d{9}(?=\D)')
+    sentence = '''
+    重要的事情说8130123456789遍，我的手机号是13512346789这个靓号，
+    不是15600998765，也是110或119，王大锤的手机号才是15600998765。
+    '''
+    
+    mylist = re.findall(pattern,sentence)
+    print(mylist)
+    m = pattern.search(sentence)
+    while m:
+        print(m.group())
+        m = pattern.search(sentence,m.end())
+        
+if __name__ == '__main__':
+    main()
+```
+
+该正则表达式中包含以下符号：
+
+- `(?<=\D)`: 零宽度正回顾后发断言，表示要匹配的手机号前面必须是一个非数字字符，但这个字符并不属于匹配结果的一部分。这个符号的含义是“匹配后面紧接着这个表达式的位置，前面是一个非数字字符”。
+- `1`: 匹配一个字符，表示手机号码的第一位数字必须是1。
+- `[34578]`: 字符集合，匹配一个字符，表示手机号码的第二位数字必须是3、4、5、7、8中的一个。
+- `\d{9}`: 匹配9个数字字符，表示手机号码的后面9位数字。
+- `(?=\D)`: 零宽度正预测先行断言，表示要匹配的手机号后面必须是一个非数字字符，但这个字符并不属于匹配结果的一部分。这个符号的含义是“匹配前面紧接着这个表达式的位置，后面是一个非数字字符”。
+
+综上，该正则表达式匹配一个字符串中的中国大陆手机号码，这个手机号码前后必须是一个非数字字符，第一位数字是1，第二位数字是3、4、5、7、8中的一个，后面跟着9个数字字符。
+
+这段代码使用正则表达式搜索字符串 `sentence` 中符合模式 `pattern` 的子串，并将每个匹配到的子串打印出来。具体的步骤如下：
+
+使用 `m.end()` 获取当前匹配子串的结尾位置，将这个位置作为第二个参数传递给 `pattern.search()`，继续搜索剩余的子串。
+
+### 例子3：替换字符串中的不良内容
+
+```python
+import re
+
+def main():
+    sentence = '你丫是傻叉吗? 我操你大爷的. Fuck you.'
+    purified = re.sub('[操肏艹]|fuck|shit|傻[比屄逼叉缺吊屌]|煞笔','*',sentence,flags=re.IGNORECASE)
+    
+    print(purified)
+    
+if __name__ == '__main__':
+    main()
+```
+
+`flags`参数是`re`模块中函数的一个可选参数，用于控制正则表达式的匹配模式。其中，`re.IGNORECASE`表示匹配时忽略大小写。
+
+例如，如果要查找字符串中所有的"hello"，并且忽略大小写，可以使用如下代码：
+
+```python
+import re
+
+sentence = "Hello world! hello Python! hEllo everyone!"
+pattern = re.compile("hello", flags=re.IGNORECASE)
+m = pattern.search(sentence)
+while m:
+    print(m.group())
+    m = pattern.search(sentence, m.end())
+```
+
+这段代码将输出：
+
+```python
+Hello
+hello
+hEllo
+```
+
+可以看到，由于使用了`re.IGNORECASE`标志，所以不区分大小写地匹配了所有的"hello"。
+
+### 例子：拆分长字符串
+
+```python
+import re
+
+def main():
+    poem = '窗前明月光，疑是地上霜。举头望明月，低头思故乡。'
+    sentence_list = re.split(r'[，。, .]',poem)
+    while '' in sentence_list:
+        sentence_list.remove('')
+    print(sentence_list)
+    
+    
+if __name__ == '__main__':
+    main()
+```
+
+
+
