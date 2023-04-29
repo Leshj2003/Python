@@ -45,3 +45,148 @@ if __name__ == '__main__':
 以上代码创建了一个子进程，并在子进程中执行`worker()`函数。主进程通过`start()`方法启动子进程，并通过`join()`方法等待子进程执行完成。最后输出的结果是先打印"Worker process"，然后再打印"Main process"。
 
 `multiprocessing`模块提供了丰富的功能，可以根据实际需求进行进一步的探索和应用。
+
+---
+
+`multiprocessing` 模块是 Python 内置的用于支持多进程编程的模块。它提供了创建和管理进程、进程间通信、共享内存等功能。下面是 `multiprocessing` 模块中一些常用的方法及示例：
+
+1. `Process(target, args=(), kwargs={}, daemon=None)`：
+
+   创建一个新的进程。`target` 参数指定进程执行的函数，`args` 和 `kwargs` 参数分别用于传递位置参数和关键字参数。`daemon` 参数指定进程是否为守护进程，默认为 `None`。
+
+   示例：
+
+   ```python
+   import multiprocessing
+   
+   def f(x):
+       print(f"Worker process: {multiprocessing.current_process().name}")
+       print(f"Argument: {x}")
+   
+   if __name__ == '__main__':
+       p = multiprocessing.Process(target=f, args=('hello',))
+       p.start()
+       p.join()
+   ```
+
+2. `Queue(maxsize=0)`：
+
+   创建一个共享的进程队列。`maxsize` 参数指定队列最多能够容纳的元素数量，默认为 `0` 表示队列大小无限制。
+
+   示例：
+
+   ```python
+   import multiprocessing
+   
+   def producer(q):
+       for i in range(5):
+           q.put(i)
+   
+   def consumer(q):
+       while True:
+           item = q.get()
+           if item is None:
+               break
+           print(f"Consumed: {item}")
+   
+   if __name__ == '__main__':
+       q = multiprocessing.Queue()
+       p1 = multiprocessing.Process(target=producer, args=(q,))
+       p2 = multiprocessing.Process(target=consumer, args=(q,))
+       p1.start()
+       p2.start()
+       p1.join()
+       q.put(None)
+       p2.join()
+   ```
+
+3. `Pool(processes=None, initializer=None, initargs=())`：
+
+   创建一个进程池。`processes` 参数指定进程池中进程的数量，默认为 `None` 表示根据系统情况决定。
+
+   示例：
+
+   ```python
+   import multiprocessing
+   
+   def f(x):
+       return x * x
+   
+   if __name__ == '__main__':
+       with multiprocessing.Pool() as p:
+           result = p.map(f, [1, 2, 3, 4, 5])
+           print(result)
+   ```
+
+4. `Lock()`：
+
+   创建一个进程锁。进程锁可以用于控制多个进程对共享资源的访问，避免出现竞争条件。
+
+   示例：
+
+   ```python
+   import multiprocessing
+   
+   def increment(count, lock):
+       for i in range(100000):
+           lock.acquire()
+           count.value += 1
+           lock.release()
+   
+   if __name__ == '__main__':
+       count = multiprocessing.Value('i', 0)
+       lock = multiprocessing.Lock()
+       processes = [multiprocessing.Process(target=increment, args=(count, lock)) for i in range(4)]
+       for process in processes:
+           process.start()
+       for process in processes:
+           process.join()
+       print(f"Result: {count.value}")
+   ```
+
+5. `Value(typecode_or_type, value)`：
+
+   创建一个共享的内存值。`typecode_or_type` 参数指定值的类型，如 `'i'` 表示`int` 类型，`'d'` 表示 `float` 类型等。`value` 参数指定初始值。
+   
+      示例：
+   
+      ```python
+      import multiprocessing
+      
+      def increment(count):
+          count.value += 1
+      
+      if __name__ == '__main__':
+          count = multiprocessing.Value('i', 0)
+          processes = [multiprocessing.Process(target=increment, args=(count,)) for i in range(4)]
+          for process in processes:
+              process.start()
+          for process in processes:
+              process.join()
+          print(f"Result: {count.value}")
+      ```
+   
+   6. `Manager()`：
+   
+      创建一个进程间共享的对象管理器。通过该管理器可以创建共享的数据结构，如列表、字典等。
+   
+      示例：
+   
+      ```python
+      import multiprocessing
+      
+      def worker(shared_list):
+          shared_list.append(multiprocessing.current_process().name)
+      
+      if __name__ == '__main__':
+          with multiprocessing.Manager() as manager:
+              shared_list = manager.list()
+              processes = [multiprocessing.Process(target=worker, args=(shared_list,)) for i in range(4)]
+              for process in processes:
+                  process.start()
+              for process in processes:
+                  process.join()
+              print(f"Result: {shared_list}")
+      ```
+   
+   这些是 `multiprocessing` 模块中一些常用的方法及示例。通过这些方法，可以实现多进程编程，并进行进程间的通信和共享数据。
