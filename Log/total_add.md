@@ -1903,3 +1903,199 @@ loop.run_until_complete(task)
 
 ---
 
+## `Pillow`库-图像操作
+
+Pillow 是一个 Python 图像处理库，提供了丰富的图像处理功能。下面是 Pillow 常用方法的说明和示例：
+
+1. 打开和保存图像：
+   - `Image.open(path)`: 打开指定路径的图像文件，并返回一个 `Image` 对象。
+   - `Image.save(path, format)`: 将图像保存到指定路径，并指定保存的格式。
+
+   示例：
+   ```python
+   from PIL import Image
+   
+   # 打开图像
+   image = Image.open('image.jpg')
+   
+   # 保存图像
+   image.save('output.jpg')
+   ```
+
+2. 调整图像大小：
+   - `Image.resize(size)`: 调整图像的大小，参数 `size` 是一个元组，表示新的宽度和高度。
+
+   示例：
+   ```python
+   from PIL import Image
+   
+   # 打开图像
+   image = Image.open('image.jpg')
+   
+   # 调整图像大小
+   new_size = (800, 600)
+   resized_image = image.resize(new_size)
+   
+   # 保存调整后的图像
+   resized_image.save('resized.jpg')
+   ```
+
+3. 图像旋转：
+   - `Image.rotate(angle)`: 将图像按给定角度旋转，参数 `angle` 是旋转的角度。
+
+   示例：
+   ```python
+   from PIL import Image
+   
+   # 打开图像
+   image = Image.open('image.jpg')
+   
+   # 旋转图像
+   rotated_image = image.rotate(90)
+   
+   # 保存旋转后的图像
+   rotated_image.save('rotated.jpg')
+   ```
+
+4. 图像裁剪：
+   - `Image.crop(box)`: 对图像进行裁剪，参数 `box` 是一个元组，表示裁剪区域的左上角和右下角坐标。
+
+   示例：
+   ```python
+   from PIL import Image
+   
+   # 打开图像
+   image = Image.open('image.jpg')
+   
+   # 裁剪图像
+   box = (100, 100, 400, 300)  # 左上角坐标为 (100, 100)，右下角坐标为 (400, 300)
+   cropped_image = image.crop(box)
+   
+   # 保存裁剪后的图像
+   cropped_image.save('cropped.jpg')
+   ```
+
+5. 图像缩略图：
+   - `Image.thumbnail(size)`: 创建图像的缩略图，参数 `size` 是一个元组，表示缩略图的大小。
+
+   示例：
+   ```python
+   from PIL import Image
+   
+   # 打开图像
+   image = Image.open('image.jpg')
+   
+   # 创建缩略图
+   thumbnail_size = (200, 200)
+   image.thumbnail(thumbnail_size)
+   
+   # 保存缩略图
+   image.save('thumbnail.jpg')
+   ```
+
+以上是 Pillow 常用方法的一些示例，还有更多的方法可以用于图像处理，如图像滤镜、调整亮度对比度等。你可以根据具体的需求来查阅 Pillow 的官方文档以了解更多方法和参数的详细说明。
+
+---
+
+## `openpyxl`模块-Excel处理
+
+openpyxl 是一个用于操作 Excel 文件的 Python 模块，它提供了一些常用方法来读取、修改和创建 Excel 文件。下面是 openpyxl 模块的一些常用方法、参数和示例：
+
+1. 打开 Excel 文件：
+   - `load_workbook(filename)`: 打开指定路径的 Excel 文件，并返回一个 `Workbook` 对象。
+
+   示例：
+   ```python
+   from openpyxl import load_workbook
+   
+   # 打开 Excel 文件
+   workbook = load_workbook('data.xlsx')
+   ```
+
+2. 选择工作表：
+   - `active`: 返回当前活动的工作表。
+   - `sheetnames`: 返回所有工作表的名称列表。
+   - `get_sheet_by_name(name)`: 根据工作表名称获取工作表对象。
+
+   示例：
+   ```python
+   # 选择活动工作表
+   sheet = workbook.active
+   
+   # 获取所有工作表的名称
+   sheet_names = workbook.sheetnames
+   
+   # 根据名称获取工作表
+   sheet = workbook.get_sheet_by_name('Sheet1')
+   ```
+
+3. 读取和写入单元格数据：
+   - `cell(row, column)`: 返回指定行列的单元格对象。
+   - `value`: 单元格的值。
+
+   示例：
+   ```python
+   # 读取单元格数据
+   value = sheet.cell(row=1, column=1).value
+   
+   # 写入单元格数据
+   sheet.cell(row=1, column=1).value = 'Hello, World!'
+   ```
+
+4. 保存 Excel 文件：
+   - `save(filename)`: 将修改后的 Excel 文件保存到指定路径。
+
+   示例：
+   ```python
+   # 保存 Excel 文件
+   workbook.save('output.xlsx')
+   ```
+
+以上是 `openpyxl` 模块的一些常用方法和示例。你可以根据具体的需求来查阅 `openpyxl` 的官方文档，了解更多的方法和参数的详细说明。
+
+---
+
+## `docx`模块-Word处理
+
+docx 是一个用于操作 Word 文档的 Python 模块，它提供了一些常用方法来读取、修改和创建 Word 文档。下面是 docx 模块的一些常用方法、参数和示例：
+
+1. 打开 Word 文档：
+   - `Document(filename)`: 打开指定路径的 Word 文档，并返回一个 `Document` 对象。
+
+   示例：
+   ```python
+   from docx import Document
+   
+   # 打开 Word 文档
+   document = Document('document.docx')
+   ```
+
+2. 读取和修改文档内容：
+   - `paragraphs`: 返回文档中所有段落的列表。
+   - `text`: 段落的文本内容。
+   - `add_paragraph(text)`: 在文档末尾添加一个新段落，并设置文本内容。
+   - `clear()`: 清空文档的所有内容。
+
+   示例：
+   ```python
+   # 读取文档内容
+   for paragraph in document.paragraphs:
+       print(paragraph.text)
+   
+   # 添加新段落
+   document.add_paragraph('This is a new paragraph.')
+   
+   # 清空文档内容
+   document.clear()
+   ```
+
+3. 保存 Word 文档：
+   - `save(filename)`: 将修改后的 Word 文档保存到指定路径。
+
+   示例：
+   ```python
+   # 保存 Word 文档
+   document.save('output.docx')
+   ```
+
+以上是 docx 模块的一些常用方法和示例。你可以根据具体的需求来查阅 docx 的官方文档，了解更多的方法和参数的详细说明。
