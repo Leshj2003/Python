@@ -1534,3 +1534,369 @@ if __name__ == '__main__':
 
 
 
+---
+
+## 多进程
+
+```python
+# 不使用进程
+from random import randint
+from time import time,sleep
+
+def download_task(filename):
+    print(f'开始下载{filename}')
+    time_to_download = randint(5,10)
+    sleep(time_to_download)
+    print(f'{filename}下载完成，耗时{time_to_download}')
+    
+def main():
+    start = time()
+    download_task('asdf.pdf')
+    download_task('hjkl.pdf')
+    end = time()
+    print('总共耗%.2f秒' % (end - start))
+    
+if __name__ == '__main__':
+    main()
+```
+
+```python
+# 使用多进程
+from multiprocessing import Process
+from os import getpid
+from random import randint
+from time import time,sleep
+
+def download_task(filename):
+    print('启动下载进程，进程号[%d]' % getpid())
+    print(f'开始下载{filename}')
+    time_to_download = randint(5,10)
+    sleep(time_to_download)
+    print(f'{filename}下载完成，耗时{time_to_download}')
+    
+def main():
+    start = time()
+    p1 = process(target = download_task,args=('asdf.pdf',))
+    p1.start()
+    p1 = process(target = download_task,args=('hjkl.pdf',))
+    p2.start()
+    p1.join()
+    p2.join()
+    end = time()
+    print('总共耗%.2f秒' % (end - start))
+    
+if __name__ == '__main__':
+    main()
+```
+
+### multiprocessing模块
+
+`multiprocessing`模块提供了多个常用方法，用于创建、管理和通信进程。下面是一些常用方法的说明及示例：
+
+1. `Process(target, args=(), kwargs={})`：创建一个新的进程对象，并指定进程的目标函数、参数和关键字参数。
+
+```python
+import multiprocessing
+
+def worker(num):
+    print('Worker:', num)
+
+if __name__ == '__main__':
+    process = multiprocessing.Process(target=worker, args=(10,))
+    process.start()
+```
+
+2. `current_process()`：返回当前进程的`Process`对象。
+
+```python
+import multiprocessing
+
+def worker():
+    print('Worker:', multiprocessing.current_process().name)
+
+if __name__ == '__main__':
+    process = multiprocessing.Process(target=worker)
+    process.start()
+```
+
+3. `Queue()`：创建一个进程间通信的队列。
+
+```python
+import multiprocessing
+
+def producer(queue):
+    for i in range(5):
+        queue.put(i)
+
+def consumer(queue):
+    while not queue.empty():
+        item = queue.get()
+        print('Consumed:', item)
+
+if __name__ == '__main__':
+    queue = multiprocessing.Queue()
+    process1 = multiprocessing.Process(target=producer, args=(queue,))
+    process2 = multiprocessing.Process(target=consumer, args=(queue,))
+    process1.start()
+    process2.start()
+```
+
+4. `Pool(processes=None)`：创建一个进程池，用于并行执行任务。
+
+```python
+import multiprocessing
+
+def worker(num):
+    return num * 2
+
+if __name__ == '__main__':
+    with multiprocessing.Pool(processes=4) as pool:
+        results = pool.map(worker, range(10))
+        print(results)
+```
+
+5. `Lock()`：创建一个进程间的锁，用于确保对共享资源的互斥访问。
+
+```python
+import multiprocessing
+
+def worker(lock, count):
+    with lock:
+        print('Acquired lock:', count)
+        print('Released lock:', count)
+
+if __name__ == '__main__':
+    lock = multiprocessing.Lock()
+    processes = []
+    for i in range(3):
+        process = multiprocessing.Process(target=worker, args=(lock, i))
+        processes.append(process)
+        process.start()
+    for process in processes:
+        process.join()
+```
+
+以上是`multiprocessing`模块的一些常用方法和示例，通过这些方法可以实现多进程的创建、通信和并行执行任务。根据实际需求，可以选择适合的方法来完成相应的任务。
+
+## 多线程
+
+```python
+from random import randint
+from threading import Thread
+from time import time, sleep
+
+
+def download(filename):
+    print('开始下载%s...' % filename)
+    time_to_download = randint(5, 10)
+    sleep(time_to_download)
+    print('%s下载完成! 耗费了%d秒' % (filename, time_to_download))
+
+
+def main():
+    start = time()
+    t1 = Thread(target=download, args=('Python从入门到住院.pdf',))
+    t1.start()
+    t2 = Thread(target=download, args=('Peking Hot.avi',))
+    t2.start()
+    t1.join()
+    t2.join()
+    end = time()
+    print('总共耗费了%.3f秒' % (end - start))
+
+
+if __name__ == '__main__':
+    main()
+```
+
+**继承Thread类创建线程**
+
+```python
+from random import randint
+from threading import Thread
+from time import time, sleep
+
+
+class DownloadTask(Thread):
+
+    def __init__(self, filename):
+        super().__init__()
+        self._filename = filename
+
+    def run(self):
+        print('开始下载%s...' % self._filename)
+        time_to_download = randint(5, 10)
+        sleep(time_to_download)
+        print('%s下载完成! 耗费了%d秒' % (self._filename, time_to_download))
+
+
+def main():
+    start = time()
+    t1 = DownloadTask('Python从入门到住院.pdf')
+    t1.start()
+    t2 = DownloadTask('Peking Hot.avi')
+    t2.start()
+    t1.join()
+    t2.join()
+    end = time()
+    print('总共耗费了%.2f秒.' % (end - start))
+
+
+if __name__ == '__main__':
+    main()
+```
+
+**线程锁**
+
+```python
+from time import sleep
+from threading import Thread, Lock
+
+
+class Account(object):
+
+    def __init__(self):
+        self._balance = 0
+        self._lock = Lock()
+
+    def deposit(self, money):
+        # 先获取锁才能执行后续的代码
+        self._lock.acquire()
+        try:
+            new_balance = self._balance + money
+            sleep(0.01)
+            self._balance = new_balance
+        finally:
+            # 在finally中执行释放锁的操作保证正常异常锁都能释放
+            self._lock.release()
+
+    @property
+    def balance(self):
+        return self._balance
+
+
+class AddMoneyThread(Thread):
+
+    def __init__(self, account, money):
+        super().__init__()
+        self._account = account
+        self._money = money
+
+    def run(self):
+        self._account.deposit(self._money)
+
+
+def main():
+    account = Account()
+    threads = []
+    for _ in range(100):
+        t = AddMoneyThread(account, 1)
+        threads.append(t)
+        t.start()
+    for t in threads:
+        t.join()
+    print('账户余额为: ￥%d元' % account.balance)
+
+
+if __name__ == '__main__':
+    main()
+```
+
+
+
+### threading模块
+
+`threading` 模块是 Python 中用于多线程编程的模块，可以通过创建线程来实现多任务并发执行。在 `threading` 模块中，每个线程都是一个 `Thread` 类的实例对象，可以通过创建多个 `Thread` 对象来创建多个线程。
+
+下面是一个简单的示例，演示了如何使用 `threading` 模块创建线程：
+
+```python
+import threading
+
+def worker(num):
+    """线程的执行函数"""
+    print("Thread %s is running..." % num)
+
+# 创建两个线程
+thread1 = threading.Thread(target=worker, args=(1,))
+thread2 = threading.Thread(target=worker, args=(2,))
+
+# 启动两个线程
+thread1.start()
+thread2.start()
+
+# 等待两个线程执行完毕
+thread1.join()
+thread2.join()
+
+print("All threads finished.")
+```
+
+在这个例子中，首先定义了一个函数 `worker`，这个函数是每个线程的执行函数。然后创建了两个线程 `thread1` 和 `thread2`，分别使用 `Thread` 类的构造函数创建，并指定线程的执行函数和参数。接着，分别启动这两个线程，并使用 `join` 方法等待这两个线程执行完毕，最后输出一条消息表示所有线程都执行完毕。
+
+`threading` 模块中的一些常用方法和属性如下：
+
+- `Thread(target, args=(), kwargs={})`：创建一个新线程，指定线程的执行函数、参数和关键字参数；
+- `start()`：启动一个线程；
+- `join([timeout])`：等待线程执行完毕，如果设置了 `timeout` 参数，则最多等待 `timeout` 秒；
+- `is_alive()`：判断线程是否还在运行；
+- `name`：获取或设置线程的名称；
+- `enumerate()`：获取当前正在运行的所有线程；
+- `active_count()`：获取当前正在运行的线程数量。
+
+以上是 `threading` 模块的一些常用方法和属性，使用这些方法和属性可以实现线程的创建、启动、等待和管理。
+
+## 异步
+
+异步编程是一种编程模式，旨在提高程序的并发性和响应性，特别适用于处理IO密集型操作和并发任务。
+
+传统的同步编程模型中，代码执行是按照顺序依次执行的，如果遇到阻塞操作（如IO操作），程序会等待操作完成后再继续执行下一步。这种模型在遇到多个阻塞操作时，会导致程序的执行效率低下。
+
+异步编程模型通过使用异步任务和回调函数来解决这个问题。在异步编程中，任务的执行是非阻塞的，即任务提交后会立即返回，不会等待任务完成。当任务完成时，会通过回调函数或其他机制通知调用者，从而实现并发执行其他任务。
+
+在Python中，异步编程通常使用协程（coroutine）和事件循环（event loop）来实现。协程是一种特殊的函数，可以在其中使用`await`关键字暂停执行，等待其他任务完成后再继续执行。事件循环负责管理协程的调度和执行，确保协程在合适的时机被调用。
+
+Python提供了`asyncio`库，用于支持异步编程。`asyncio`提供了丰富的API和工具，用于编写异步代码，并提供了事件循环、协程、异步IO等功能。通过使用`async`和`await`关键字，可以定义协程函数，并在其中使用异步操作，以实现高效的异步编程。
+
+异步编程的优点包括：
+
+1. 高并发性：可以处理大量的并发任务，提高程序的吞吐量。
+2. 更好的响应性：异步操作不会阻塞主线程，使得程序可以及时响应用户的请求。
+3. 资源高效利用：由于异步操作不需要线程等资源来等待阻塞，可以更高效地利用系统资源。
+
+然而，异步编程也存在一些挑战和注意事项，例如编写复杂的异步代码可能会增加代码的复杂性，需要注意处理并发操作时的同步和线程安全性问题。
+
+总而言之，异步编程是一种提高程序并发性和响应性的编程模式，在处理IO密集型任务和并发操作时具有很大的优势。在Python中，可以使用`asyncio`库来实现异步编程，并通过协程和事件循环来管理和调度异步任务的执行。
+
+---
+
+协程（Coroutine）是一种轻量级的并发编程技术，可以在单线程内实现多个协作的执行流程。它可以在某个任务阻塞时，自动切换到另一个任务，从而实现任务之间的高效切换和并发执行。
+
+在Python中，协程通常使用生成器函数和`yield`关键字来实现。通过使用`yield`语句暂停生成器函数的执行，并在需要时恢复执行，可以实现协程的特性。
+
+下面是一个简单的示例，演示了如何使用协程来实现异步任务的执行：
+
+```python
+import asyncio
+
+# 定义一个协程函数
+async def async_task():
+    print("开始执行异步任务")
+    await asyncio.sleep(1)  # 模拟耗时操作
+    print("异步任务执行完毕")
+
+# 创建一个事件循环对象
+loop = asyncio.get_event_loop()
+
+# 将协程函数封装为任务并添加到事件循环中
+task = loop.create_task(async_task())
+
+# 执行事件循环，直到所有任务完成
+loop.run_until_complete(task)
+```
+
+在上述示例中，通过定义一个协程函数`async_task`，并在其中使用`await`关键字来暂停执行，实现了异步任务的执行。通过`loop.create_task()`将协程函数封装为任务，并通过`loop.run_until_complete()`执行事件循环，直到任务完成。
+
+协程的优势在于它可以提供更高效的并发执行和更低的资源消耗，特别适用于处理大量的IO密集型任务。在Python中，可以使用`asyncio`库来提供对协程的支持和管理，它提供了丰富的API和工具，用于编写异步代码并处理协程之间的交互和调度。
+
+需要注意的是，协程的执行需要在异步环境中进行，例如使用`asyncio`库提供的事件循环。此外，Python还提供了一些其他的协程库和框架，如`gevent`和`twisted`，用于更高级的异步编程和网络应用开发。
