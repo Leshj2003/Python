@@ -123,7 +123,7 @@
 
 
 
-# Python语言特性
+#  Python语言特性
 
 ## 1 Python的函数参数传递
 
@@ -1894,5 +1894,4 @@ class Anagram:
 ## 23 动态规划问题
 
 >  可参考：[动态规划(DP)的整理-Python描述](http://blog.csdn.net/mrlevo520/article/details/75676160)
-
 
