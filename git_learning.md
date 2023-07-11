@@ -204,3 +204,15 @@ git stash pop
 ```
 
 需要注意的是，如果在存储修改之后又进行了新的修改，那么恢复修改时可能会出现冲突，需要手动解决。因此在执行之前需要先保存修改。
+
+
+
+
+
+---
+
+* 遇到error: RPC failed; HTTP 413 curl 22 The requested URL returned error: 413
+
+```bash
+git remote set-url origin git@gitee.com:....
+```
