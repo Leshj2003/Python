@@ -4,7 +4,7 @@
 
 下面是它们的使用方法和示例：
 
-1. ```
+1. ```python
    heapq.nsmallest(n, iterable, key=None)
    ```
 
@@ -15,7 +15,7 @@
 
 示例：
 
-```
+```python
 import heapq
 
 numbers = [5, 9, 3, 1, 7]
@@ -27,7 +27,7 @@ print(smallest)  # 输出：[1, 3, 5]
 
 在上面的示例中，`heapq.nsmallest(3, numbers)` 返回了列表 `numbers` 中最小的三个元素 `[1, 3, 5]`。
 
-1. ```
+1. ```python
    heapq.nlargest(n, iterable, key=None)
    ```
 
@@ -38,7 +38,7 @@ print(smallest)  # 输出：[1, 3, 5]
 
 示例：
 
-```
+```python
 import heapq
 
 numbers = [5, 9, 3, 1, 7]
